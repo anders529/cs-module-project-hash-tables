@@ -98,8 +98,25 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        hashValue = self.hash_index(key)
-        self.storage[hashValue] = None
+        # Old Code for no Collisions
+        # hashValue = self.hash_index(key)
+        # self.storage[hashValue] = None
+        
+        i = self.hash_index(key)
+        oldy = None
+        noodle = self.storage[i]
+        if noodle.key == key:
+            self.storage[i] = noodle.next
+            return
+        while noodle != None:
+            if noodle.key == key:
+                oldy.next = noodle.next
+                self.storage[i].next = None
+                return
+            oldy = noodle
+            noodle = noodle.next
+        self.fecs -= 1
+        return
 
     def get(self, key):
         """
@@ -108,8 +125,18 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        hashValue = self.hash_index(key)
-        return self.storage[hashValue]
+        # Old Code for no Collisions
+        # hashValue = self.hash_index(key)
+        # return self.storage[hashValue]
+
+        i = self.hash_index(key)
+        noodles = self.storage[i]
+        if noodles is not None:
+            while noodles:
+                if noodles.key == key:
+                    return noodles.value
+                noodles = noodles.next
+        return noodles
 
     def resize(self, new_capacity):
         """
@@ -119,7 +146,16 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        pass
+        old_storage = self.storage
+        self.capacity = new_capacity
+        self.storage = [None] * new_capacity
+        for i in range(len(old_storage)):
+            oldone = old_storage[i]
+            if oldone:
+                while oldone:
+                    if oldone.key:
+                        self.put(oldone.key, oldone.value)
+                        oldone = oldone.next
 
 if __name__ == "__main__":
     ht = HashTable(8)
