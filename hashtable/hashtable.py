@@ -76,8 +76,20 @@ class HashTable:
         Implement this.
         """
         # Your code here
-        hashValue = self.hash_index(key)
-        self.storage[hashValue] = value
+        i = self.hash_index(key)
+        hashEntry = HashTableEntry(key, value)
+        noodle = self.storage[i]
+
+        if noodle is not None:
+            self.storage[i] = hashEntry
+            self.storage[i].next = noodle
+        else:
+            self.storage[i] = hashEntry
+        self.fecs += 1
+
+        # Code below is for no collisions
+        # hashValue = self.hash_index(key)
+        # self.storage[hashValue] = value
 
     def delete(self, key):
         """
